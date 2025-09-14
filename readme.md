@@ -121,3 +121,8 @@ From the Swagger UI, you can test all the API endpoints directly from your brows
 ├── models.py         # SQLAlchemy ORM models (defines database tables)
 └── README.md         # This file
 ```
+
+
+## look of API Endpoints 
+
+![alt text](image.png)
