@@ -74,11 +74,11 @@ async def read_post(post_id:int,db:db_dependency):
         raise HTTPException(status_code=404,detail="post not found")
     return post
 
-@app.delete("/posts/{post_id}",status_code=status.HTTP_200_OK)
+@app.delete("/posts/{post_id}",status_code=status.HTTP_204_NO_CONTENT)
 async def delete_post(post_id:int,db:db_dependency):
     post=db.query(models.Post).filter(models.Post.id==post_id).first()
     if post is None:
         raise HTTPException(status_code=404,detail="post not found")
     db.delete(post)
     db.commit()
-    return {"detail":"post deleted successfully"}
+    return 
