@@ -1,4 +1,7 @@
-from sqlalchemy import Boolean, Column, Integer,String
+# to create table or database structure
+
+from sqlalchemy import Column, Integer,String, ForeignKey
+from sqlalchemy.orm import relationship
 from database import Base
 
 class User(Base):
@@ -6,6 +9,8 @@ class User(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     username = Column(String(50), unique = True)
+    # This tells SQLAlchemy that a User can have many Posts
+    posts = relationship("Post", back_populates="owner")
 
 class Post(Base):
     __tablename__ = "posts"
@@ -13,4 +18,5 @@ class Post(Base):
     id =Column(Integer,primary_key=True,index=True)
     title =Column(String(50))
     content = Column(String(100))
-    user_id=Column(Integer)
+    user_id=Column(Integer, ForeignKey("Users.id"))
+    owner = relationship("User", back_populates="posts")
