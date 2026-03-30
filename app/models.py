@@ -1,22 +1,27 @@
-# to create table or database structure
-
-from sqlalchemy import Column, Integer,String, ForeignKey
+from sqlalchemy import Column, Integer, String, Text, ForeignKey, DateTime, func
 from sqlalchemy.orm import relationship
-from database import Base
+
+from app.database import Base
+
 
 class User(Base):
-    __tablename__ = "Users"
+    __tablename__ = "users"
 
     id = Column(Integer, primary_key=True, index=True)
-    username = Column(String(50), unique = True)
-    # This tells SQLAlchemy that a User can have many Posts
-    posts = relationship("Post", back_populates="owner")
+    username = Column(String(50), unique=True, nullable=False, index=True)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+    posts = relationship("Post", back_populates="owner", cascade="all, delete-orphan")
+
 
 class Post(Base):
     __tablename__ = "posts"
 
-    id =Column(Integer,primary_key=True,index=True)
-    title =Column(String(50))
-    content = Column(String(100))
-    user_id=Column(Integer, ForeignKey("Users.id"))
+    id = Column(Integer, primary_key=True, index=True)
+    title = Column(String(200), nullable=False)
+    content = Column(Text, nullable=False)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    updated_at = Column(DateTime(timezone=True), onupdate=func.now())
+
     owner = relationship("User", back_populates="posts")
